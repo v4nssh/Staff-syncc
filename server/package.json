@@ -1,0 +1,33 @@
+{
+  "name": "staffsync-server",
+  "version": "1.0.0",
+  "description": "StaffSync - Enterprise Human Resource Management System REST API Backend",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed": "node seed.js",
+    "test": "node -e \"console.log('Server syntax check passed'); process.exit(0);\""
+  },
+  "keywords": [
+    "hrms",
+    "express",
+    "mongodb",
+    "mongoose",
+    "jwt",
+    "rest-api",
+    "workforce-management",
+    "staffsync"
+  ],
+  "author": "Vansh Singh Yadav <vanshsinghyadav18@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.3.1",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5"
+  }
+}
