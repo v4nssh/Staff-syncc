@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { FiMenu, FiBell, FiCalendar, FiUser } from 'react-icons/fi';
+import { FiMenu, FiCalendar, FiUser } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
 const Navbar = ({ onToggleSidebar }) => {
@@ -16,36 +16,38 @@ const Navbar = ({ onToggleSidebar }) => {
   const getRoleBadge = (role) => {
     switch (role) {
       case 'hr':
-        return <span className="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-1 rounded-pill fw-semibold">HR Admin</span>;
+        return <span className="badge bg-primary text-white px-3 py-1 rounded-pill fw-medium">HR Administrator</span>;
       case 'manager':
-        return <span className="badge bg-info-subtle text-info-emphasis border border-info-subtle px-3 py-1 rounded-pill fw-semibold">Team Manager</span>;
+        return <span className="badge bg-info-subtle text-primary border px-3 py-1 rounded-pill fw-medium">Team Manager</span>;
       default:
-        return <span className="badge bg-success-subtle text-success-emphasis border border-success-subtle px-3 py-1 rounded-pill fw-semibold">Employee</span>;
+        return <span className="badge bg-light text-secondary border px-3 py-1 rounded-pill fw-medium">Staff Employee</span>;
     }
   };
 
   return (
-    <header className="navbar-top bg-white border-bottom px-4 py-3 d-flex align-items-center justify-content-between sticky-top shadow-xs">
+    <header className="navbar-top px-4 py-2 d-flex align-items-center justify-content-between shadow-none">
       <div className="d-flex align-items-center gap-3">
         <button
           className="btn btn-light d-lg-none p-2 rounded-3 border"
           onClick={onToggleSidebar}
           aria-label="Toggle Navigation"
         >
-          <FiMenu size={20} />
+          <FiMenu size={18} />
         </button>
         <div>
-          <h5 className="mb-0 fw-bold text-dark">StaffSync WorkSpace</h5>
-          <span className="small text-muted d-none d-sm-inline">
-            Human Capital & Operational Synchronization
+          <h6 className="mb-0 fw-semibold text-dark" style={{ letterSpacing: '-0.02em', fontSize: '1.05rem' }}>
+            StaffSync
+          </h6>
+          <span className="text-muted d-none d-sm-inline" style={{ fontSize: '0.74rem' }}>
+            Workforce Management Suite
           </span>
         </div>
       </div>
 
       <div className="d-flex align-items-center gap-3">
         {/* Current Date Display */}
-        <div className="d-none d-md-flex align-items-center gap-2 text-muted bg-light px-3 py-1 rounded-pill small">
-          <FiCalendar className="text-primary" />
+        <div className="d-none d-md-flex align-items-center gap-2 text-muted px-3 py-1 rounded-pill" style={{ backgroundColor: '#f0f0f2', fontSize: '0.8rem' }}>
+          <FiCalendar style={{ color: '#0066cc' }} />
           <span>{todayStr}</span>
         </div>
 
@@ -55,18 +57,19 @@ const Navbar = ({ onToggleSidebar }) => {
         {/* User Profile Pill */}
         <Link
           to="/profile"
-          className="d-flex align-items-center gap-2 text-decoration-none text-dark p-1 rounded-pill hover-bg-light"
+          className="d-flex align-items-center gap-2 text-decoration-none text-dark p-1 px-2 rounded-pill transition-all"
+          style={{ backgroundColor: '#f5f5f7', border: '1px solid rgba(0,0,0,0.06)' }}
         >
           <img
-            src={
-              user?.avatar ||
-              `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'Staff')}&background=2563eb&color=fff&size=80`
-            }
+            src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'User')}&background=0066cc&color=fff`}
             alt={user?.name}
-            className="rounded-circle border"
-            style={{ width: '36px', height: '36px', objectFit: 'cover' }}
+            className="rounded-circle object-fit-cover"
+            width="26"
+            height="26"
           />
-          <span className="fw-semibold small d-none d-md-inline">{user?.name}</span>
+          <span className="small fw-medium d-none d-sm-inline text-dark" style={{ fontSize: '0.82rem' }}>
+            {user?.name?.split(' ')[0] || 'Profile'}
+          </span>
         </Link>
       </div>
     </header>

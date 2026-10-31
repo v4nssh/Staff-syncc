@@ -11,11 +11,10 @@ import {
   FiUser,
   FiLogOut,
   FiX,
-  FiShield,
 } from 'react-icons/fi';
 
 const Sidebar = ({ isOpen, onClose }) => {
-  const { user, logout, isHr, isManager } = useAuth();
+  const { user, logout } = useAuth();
 
   const navItems = [
     { name: 'Dashboard', path: '/dashboard', icon: FiGrid },
@@ -38,100 +37,86 @@ const Sidebar = ({ isOpen, onClose }) => {
       )}
 
       <aside
-        className={`sidebar bg-navy text-white d-flex flex-column justify-content-between ${
+        className={`sidebar text-white d-flex flex-column justify-content-between p-3 ${
           isOpen ? 'show' : ''
         }`}
       >
         <div>
           {/* Brand header */}
-          <div className="d-flex align-items-center justify-content-between p-4 border-bottom border-secondary border-opacity-25">
+          <div className="d-flex align-items-center justify-content-between px-2 py-3 mb-3 border-bottom border-secondary border-opacity-10">
             <div className="d-flex align-items-center gap-2">
               <div className="brand-logo-icon">
-                <span className="fw-bold">SS</span>
+                <span>SS</span>
               </div>
               <div>
-                <h5 className="fw-bold mb-0 text-white tracking-wide">StaffSync</h5>
-                <span className="small text-secondary" style={{ fontSize: '0.72rem' }}>
-                  Enterprise HRMS
+                <h6 className="fw-semibold mb-0 text-white" style={{ letterSpacing: '-0.02em', fontSize: '0.98rem' }}>
+                  StaffSync
+                </h6>
+                <span className="text-secondary" style={{ fontSize: '0.7rem' }}>
+                  HRMS Enterprise
                 </span>
               </div>
             </div>
             <button
               className="btn btn-link text-white p-0 d-lg-none"
               onClick={onClose}
-              aria-label="Close sidebar"
+              aria-label="Close Navigation"
             >
-              <FiX size={22} />
+              <FiX size={20} />
             </button>
           </div>
 
-          {/* Role badge pill */}
-          <div className="px-4 py-3">
-            <div className="role-tag-box d-flex align-items-center gap-2 px-3 py-2 rounded-3">
-              <FiShield className="text-info" />
-              <div className="overflow-hidden">
-                <span className="d-block small text-secondary text-uppercase" style={{ fontSize: '0.68rem', letterSpacing: '0.05em' }}>
-                  Current Mode
-                </span>
-                <span className="fw-semibold text-white small text-capitalize text-truncate d-block">
-                  {user?.role === 'hr' ? 'HR Administrator' : user?.role === 'manager' ? 'Team Manager' : 'Staff Employee'}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Navigation Links */}
-          <nav className="nav flex-column px-3 mt-1 gap-1">
+          {/* Navigation link list */}
+          <nav className="d-flex flex-column gap-1">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
                 <NavLink
                   key={item.path}
                   to={item.path}
-                  onClick={() => onClose && onClose()}
+                  onClick={onClose}
                   className={({ isActive }) =>
-                    `nav-link d-flex align-items-center gap-3 px-3 py-2 rounded-3 sidebar-nav-item transition-all ${
-                      isActive ? 'active-nav-item' : 'text-secondary-subtle'
+                    `sidebar-nav-item d-flex align-items-center gap-3 px-3 py-2 text-decoration-none ${
+                      isActive ? 'active-nav-item' : ''
                     }`
                   }
                 >
                   <Icon size={18} />
-                  <span className="fw-medium">{item.name}</span>
+                  <span>{item.name}</span>
                 </NavLink>
               );
             })}
           </nav>
         </div>
 
-        {/* Footer profile info & logout */}
-        <div className="p-3 border-top border-secondary border-opacity-25">
-          <div className="d-flex align-items-center justify-content-between mb-3 px-2">
+        {/* Footer session info */}
+        <div className="pt-3 border-top border-secondary border-opacity-10">
+          <div className="d-flex align-items-center justify-content-between px-2 mb-3">
             <div className="d-flex align-items-center gap-2 overflow-hidden">
               <img
-                src={
-                  user?.avatar ||
-                  `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'Staff')}&background=2563eb&color=fff&size=100`
-                }
+                src={user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || 'User')}&background=0066cc&color=fff`}
                 alt={user?.name}
-                className="rounded-circle object-fit-cover"
-                style={{ width: '38px', height: '38px' }}
+                className="rounded-circle flex-shrink-0"
+                width="32"
+                height="32"
               />
               <div className="overflow-hidden">
-                <div className="fw-semibold text-white small text-truncate">
+                <p className="mb-0 text-white small fw-medium text-truncate" style={{ fontSize: '0.82rem' }}>
                   {user?.name}
-                </div>
-                <div className="text-secondary small text-truncate" style={{ fontSize: '0.72rem' }}>
-                  {user?.position}
-                </div>
+                </p>
+                <p className="mb-0 text-secondary text-truncate" style={{ fontSize: '0.7rem' }}>
+                  {user?.email}
+                </p>
               </div>
             </div>
           </div>
 
           <button
             onClick={logout}
-            className="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2 py-2 rounded-3 small fw-semibold"
+            className="btn btn-outline-light w-100 d-flex align-items-center justify-content-center gap-2 border-opacity-25"
+            style={{ borderRadius: '9999px', fontSize: '0.82rem', padding: '7px 14px' }}
           >
-            <FiLogOut size={16} />
+            <FiLogOut size={15} />
             <span>Sign Out</span>
           </button>
         </div>
