@@ -3,15 +3,17 @@
   "version": "1.0.0",
   "description": "StaffSync - Enterprise Human Resource Management & Personnel Synchronization System",
   "scripts": {
-    "build": "npm --prefix client install && npm --prefix client run build",
-    "client:build": "npm --prefix client run build",
-    "client": "npm --prefix client run dev",
-    "server": "npm --prefix server run dev",
-    "server:start": "npm --prefix server start",
-    "seed": "npm --prefix server run seed",
-    "install:server": "npm --prefix server install",
-    "install:client": "npm --prefix client install",
-    "install:all": "npm install && npm --prefix server install && npm --prefix client install"
+    "dev": "node scripts/dev.js",
+    "dev:all": "node scripts/dev.js",
+    "dev:client": "pnpm --filter staffsync-client dev",
+    "dev:server": "pnpm --filter staffsync-server dev",
+    "client": "pnpm --filter staffsync-client dev",
+    "server": "pnpm --filter staffsync-server dev",
+    "server:start": "pnpm --filter staffsync-server start",
+    "seed": "pnpm --filter staffsync-server seed",
+    "build": "pnpm --filter staffsync-client build",
+    "client:build": "pnpm --filter staffsync-client build",
+    "install:all": "pnpm install"
   },
   "keywords": [
     "hrms",
