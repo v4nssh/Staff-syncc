@@ -18,10 +18,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
 
-      - name: Install Root Dependencies
-        run: npm ci || npm install
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install Dependencies
+        run: pnpm install
 
       - name: Validate Backend Syntax
         run: |
@@ -32,9 +34,5 @@ jobs:
             node -c "$file"
           done
 
-      - name: Install Client Dependencies
-        run: npm --prefix client ci || npm --prefix client install
-
       - name: Build Frontend Client
-        run: npm --prefix client run build
-
+        run: pnpm --filter staffsync-client build
