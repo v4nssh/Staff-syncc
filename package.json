@@ -10,8 +10,8 @@
     "server": "pnpm --filter staffsync-server dev",
     "server:start": "pnpm --filter staffsync-server start",
     "seed": "pnpm --filter staffsync-server seed",
-    "build": "pnpm --filter staffsync-client build",
-    "client:build": "pnpm --filter staffsync-client build",
+    "build": "npm --prefix client install && npm --prefix client run build",
+    "client:build": "npm --prefix client run build",
     "install:all": "pnpm install"
   },
   "keywords": [
