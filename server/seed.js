@@ -9,6 +9,11 @@ const TrainingEnrollment = require('./models/TrainingEnrollment');
 
 dotenv.config();
 
+const dns = require('dns');
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
+} catch (e) {}
+
 const formatDate = (date) => {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -23,7 +28,7 @@ const seedDatabase = async () => {
       process.env.MONGO_URI ||
       'mongodb://127.0.0.1:27017/staffsync';
     console.log(`Connecting to MongoDB at: ${mongoUri.replace(/:([^@]+)@/, ':****@')}`);
-    await mongoose.connect(mongoUri);
+    await mongoose.connect(mongoUri, { tls: true, serverSelectionTimeoutMS: 15000 });
 
     console.log('Cleaning existing records for fresh seed...');
     await User.deleteMany();

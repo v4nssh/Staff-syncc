@@ -1,4 +1,10 @@
 const mongoose = require('mongoose');
+const dns = require('dns');
+
+// Configure reliable DNS servers for Windows Node.js SRV resolution
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
+} catch (e) {}
 
 // Cache database connection across serverless invocations
 let cached = global.mongoose;
@@ -20,11 +26,13 @@ const connectDB = async () => {
 
   // If a connection promise is currently in progress, wait for it
   if (!cached.promise) {
+    const isSrv = mongoUri.startsWith('mongodb+srv://');
     const opts = {
       bufferCommands: false,
       maxPoolSize: 10,
-      serverSelectionTimeoutMS: 5000,
+      serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 45000,
+      ...(isSrv ? { tls: true } : {}),
     };
 
     cached.promise = mongoose
