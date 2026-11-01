@@ -14,6 +14,8 @@ try {
   dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
 } catch (e) {}
 
+const { sanitizeMongoUri } = require('./config/db');
+
 const formatDate = (date) => {
   const y = date.getFullYear();
   const m = String(date.getMonth() + 1).padStart(2, '0');
@@ -23,10 +25,11 @@ const formatDate = (date) => {
 
 const seedDatabase = async () => {
   try {
-    const mongoUri =
+    const rawUri =
       process.env.MONGODB_URI ||
       process.env.MONGO_URI ||
       'mongodb://127.0.0.1:27017/staffsync';
+    const mongoUri = sanitizeMongoUri(rawUri);
     console.log(`Connecting to MongoDB at: ${mongoUri.replace(/:([^@]+)@/, ':****@')}`);
     await mongoose.connect(mongoUri, { tls: true, serverSelectionTimeoutMS: 15000 });
 

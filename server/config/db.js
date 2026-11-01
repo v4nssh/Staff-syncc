@@ -6,6 +6,31 @@ try {
   dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
 } catch (e) {}
 
+// Resilient URI sanitizer to handle unencoded special characters in credentials
+const sanitizeMongoUri = (rawUri) => {
+  if (!rawUri || typeof rawUri !== 'string') return rawUri;
+  const trimmed = rawUri.trim();
+
+  // Match protocol, username, password (may contain unescaped chars like @ or #), host, and path
+  const match = trimmed.match(/^(mongodb(?:\+srv)?:\/\/)([^:]+):(.+)@([^@/?]+)(\/?.*)$/);
+  if (!match) return trimmed;
+
+  const proto = match[1];
+  const user = encodeURIComponent(decodeURIComponent(match[2]));
+  const pass = encodeURIComponent(decodeURIComponent(match[3]));
+  const host = match[4];
+  let rest = match[5] || '';
+
+  // Append database name and default parameters if omitted
+  if (rest === '' || rest === '/') {
+    rest = '/staffsync?retryWrites=true&w=majority';
+  } else if (!rest.includes('?') && !rest.startsWith('/?')) {
+    rest = `${rest}?retryWrites=true&w=majority`;
+  }
+
+  return `${proto}${user}:${pass}@${host}${rest}`;
+};
+
 // Cache database connection across serverless invocations
 let cached = global.mongoose;
 
@@ -14,10 +39,12 @@ if (!cached) {
 }
 
 const connectDB = async () => {
-  const mongoUri =
+  const rawUri =
     process.env.MONGODB_URI ||
     process.env.MONGO_URI ||
     'mongodb://127.0.0.1:27017/staffsync';
+
+  const mongoUri = sanitizeMongoUri(rawUri);
 
   // Return active connection if already established
   if (cached.conn && mongoose.connection.readyState === 1) {
@@ -61,3 +88,4 @@ const connectDB = async () => {
 };
 
 module.exports = connectDB;
+module.exports.sanitizeMongoUri = sanitizeMongoUri;
